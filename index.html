@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="./favicon-odonto.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Página Demonstrativa — Odontologia</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f0f7ff;
+    --bg-2: #e4f0fc;
+    --bg-3: #d6e8f9;
+    --blue: #1a6fa8;
+    --blue-2: #2589cc;
+    --blue-light: #e0f0ff;
+    --blue-dim: rgba(26,111,168,0.08);
+    --blue-border: rgba(26,111,168,0.18);
+    --text: #0d2137;
+    --text-2: rgba(13,33,55,0.6);
+    --text-3: rgba(13,33,55,0.3);
+    --border: rgba(26,111,168,0.12);
+    --white: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 0 1rem 4rem;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; top: 0; left: 0; right: 0; height: 340px;
+    background: linear-gradient(180deg, rgba(26,111,168,0.07) 0%, transparent 100%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .container { width: 100%; max-width: 430px; position: relative; z-index: 1; }
+
+  /* ── PERFIL ── */
+  .profile {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 3rem 0 1.5rem; text-align: center;
+  }
+  .logo-wrap { position: relative; margin-bottom: 1.25rem; }
+  .logo-circle {
+    width: 100px; height: 100px; border-radius: 50%;
+    background: var(--bg-2);
+    border: 2px solid var(--blue-border);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative; z-index: 1;
+    font-size: 3rem;
+  }
+  .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
+  .logo-ring {
+    position: absolute; inset: -6px; border-radius: 50%;
+    animation: spin 8s linear infinite;
+    background: conic-gradient(#22c55e 0deg, transparent 60deg, transparent 300deg, #22c55e 360deg);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), white calc(100% - 2px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 2px), white calc(100% - 2px));
+  }
+  .logo-ring.aberto { background: conic-gradient(#22c55e 0deg, transparent 60deg, transparent 300deg, #22c55e 360deg); }
+  .logo-ring.fechado { background: conic-gradient(#ef4444 0deg, transparent 60deg, transparent 300deg, #ef4444 360deg); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .profile-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem; font-weight: 700;
+    letter-spacing: -0.01em; line-height: 1.1;
+    margin-bottom: 0.25rem;
+  }
+  .profile-title {
+    font-size: 0.78rem; color: var(--blue);
+    text-transform: uppercase; letter-spacing: 0.18em;
+    font-weight: 500; margin-bottom: 0.3rem;
+  }
+  .profile-crn { font-size: 0.7rem; color: var(--text-3); letter-spacing: 0.08em; margin-bottom: 0.9rem; }
+
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.4rem 1rem; border-radius: 100px;
+    font-size: 0.73rem; font-weight: 500; margin-bottom: 0.4rem;
+  }
+  .status-badge.aberto { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); color: #16a34a; }
+  .status-badge.fechado { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); color: #dc2626; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .aberto .status-dot { background: #22c55e; animation: pulse 2s infinite; }
+  .fechado .status-dot { background: #ef4444; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .status-horario { font-size: 0.7rem; color: var(--text-3); margin-bottom: 0.5rem; }
+
+  .profile-bio {
+    font-size: 0.88rem; color: var(--text-2);
+    line-height: 1.7; max-width: 320px;
+    font-weight: 300; font-style: italic;
+    border-left: 2px solid var(--blue);
+    padding-left: 0.75rem; text-align: left; margin-top: 0.5rem;
+  }
+
+  /* ── SEÇÃO LABEL ── */
+  .sec-label {
+    font-size: 0.63rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.2em;
+    color: var(--blue); margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── BOTÕES DE SERVIÇO ── */
+  .links { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; margin-top: 1.75rem; }
+  .link-btn {
+    display: flex; align-items: center; gap: 0.9rem;
+    padding: 1rem 1.25rem; border-radius: 16px;
+    text-decoration: none; transition: all 0.25s;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    box-shadow: 0 2px 12px rgba(26,111,168,0.06);
+    position: relative; overflow: hidden;
+  }
+  .link-btn::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--blue-dim); opacity: 0; transition: opacity 0.25s;
+  }
+  .link-btn:hover::before { opacity: 1; }
+  .link-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,111,168,0.12); border-color: var(--blue-border); }
+  .link-btn.primary { background: var(--blue); border-color: var(--blue); box-shadow: 0 4px 20px rgba(26,111,168,0.25); }
+  .link-btn.primary::before { background: rgba(255,255,255,0.1); }
+  .link-btn.primary .link-label { color: white; }
+  .link-btn.primary .link-sub { color: rgba(255,255,255,0.6); }
+  .link-btn.primary .link-icon { background: rgba(255,255,255,0.15); }
+  .link-btn.primary .link-arr { color: rgba(255,255,255,0.5); }
+  .link-btn.disabled-btn { opacity: 0.4; pointer-events: none; filter: grayscale(0.5); }
+  .link-icon {
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--blue-dim);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .link-text { flex: 1; }
+  .link-label { font-size: 0.88rem; font-weight: 500; display: block; color: var(--text); }
+  .link-sub { font-size: 0.71rem; color: var(--text-2); display: block; margin-top: 0.1rem; }
+  .link-arr { color: var(--text-3); font-size: 0.9rem; flex-shrink: 0; }
+
+  /* ── ATENDIMENTO ── */
+  .atend-section { width: 100%; margin-top: 1.75rem; }
+  .atend-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 1.25rem 1.5rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .atend-row { display: flex; align-items: center; gap: 0.75rem; font-size: 0.83rem; color: var(--text-2); }
+  .atend-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: var(--blue-dim);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem; flex-shrink: 0;
+  }
+  .atend-text strong { color: var(--text); font-weight: 500; display: block; font-size: 0.83rem; }
+  .atend-text span { font-size: 0.75rem; color: var(--text-2); }
+
+  /* ── CALCULADORA DE SORRISO ── */
+  .sorriso-section { width: 100%; margin-top: 1.75rem; }
+  .sorriso-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 20px; padding: 1.75rem 1.5rem;
+    box-shadow: 0 4px 24px rgba(26,111,168,0.08);
+    position: relative; overflow: hidden;
+  }
+  .sorriso-progress {
+    position: absolute; top: 0; left: 0;
+    height: 3px; background: var(--blue);
+    transition: width 0.4s ease; border-radius: 0 4px 4px 0;
+  }
+  .sorriso-counter {
+    font-size: 0.68rem; font-weight: 600;
+    color: var(--blue); text-transform: uppercase;
+    letter-spacing: 0.15em; margin-bottom: 1.25rem;
+  }
+  .sorriso-step { display: none; animation: wizIn 0.4s ease; }
+  .sorriso-step.active { display: block; }
+  @keyframes wizIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+  .sorriso-question {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--text); margin-bottom: 0.4rem; line-height: 1.3;
+  }
+  .sorriso-hint { font-size: 0.75rem; color: var(--text-3); margin-bottom: 1.25rem; }
+  .sorriso-options { display: flex; flex-direction: column; gap: 0.6rem; }
+  .sorriso-option {
+    padding: 0.85rem 1.1rem;
+    background: var(--bg-2); border: 1.5px solid var(--border);
+    border-radius: 12px; cursor: pointer;
+    font-size: 0.88rem; color: var(--text);
+    transition: all 0.2s; text-align: left;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .sorriso-option:hover { border-color: var(--blue); background: var(--blue-dim); }
+  .sorriso-option.selected { border-color: var(--blue); background: var(--blue-dim); color: var(--blue); font-weight: 500; }
+  .sorriso-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .btn-sorriso-next {
+    flex: 1; padding: 0.9rem;
+    background: var(--blue); color: white;
+    border: none; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-sorriso-next:hover { background: var(--blue-2); transform: translateY(-1px); }
+  .btn-sorriso-back {
+    padding: 0.9rem 1.1rem;
+    background: transparent; color: var(--text-2);
+    border: 1.5px solid var(--border); border-radius: 12px;
+    cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .btn-sorriso-back:hover { border-color: var(--text-2); }
+
+  /* Resultado */
+  .sorriso-resultado { display: none; animation: wizIn 0.4s ease; text-align: center; padding: 1rem 0; }
+  .sorriso-resultado.show { display: block; }
+  .resultado-emoji { font-size: 3rem; margin-bottom: 0.75rem; }
+  .resultado-titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem;
+  }
+  .resultado-desc { font-size: 0.83rem; color: var(--text-2); line-height: 1.6; margin-bottom: 1.25rem; }
+  .resultado-badge {
+    display: inline-block; padding: 0.3rem 1rem; border-radius: 100px;
+    font-size: 0.72rem; font-weight: 600; margin-bottom: 1.25rem;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .badge-verde { background: #dcfce7; color: #16a34a; }
+  .badge-amarelo { background: #fef9c3; color: #ca8a04; }
+  .badge-vermelho { background: #fee2e2; color: #dc2626; }
+  .btn-agendar-sorriso {
+    display: block; width: 100%; padding: 1rem;
+    background: var(--blue); color: white;
+    border: none; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.92rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; text-decoration: none;
+    text-align: center;
+  }
+  .btn-agendar-sorriso:hover { background: var(--blue-2); transform: translateY(-1px); }
+  .resultado-nota { font-size: 0.7rem; color: var(--text-3); margin-top: 0.75rem; line-height: 1.5; }
+
+  /* ── HORÁRIOS ── */
+  .hours-section { width: 100%; margin-top: 1.75rem; }
+  .hours-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .hours-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.7rem 1.25rem; border-bottom: 1px solid var(--border); font-size: 0.81rem;
+  }
+  .hours-row:last-child { border-bottom: none; }
+  .hours-day { color: var(--text-2); }
+  .hours-time { font-weight: 500; color: var(--text); }
+  .hours-time.fechado-txt { color: #dc2626; font-weight: 400; }
+  .hours-row.hoje { background: var(--blue-dim); }
+  .hours-row.hoje .hours-day { color: var(--blue); font-weight: 600; }
+
+  /* ── ÍCONES SOCIAIS ── */
+  .social-icons {
+    width: 100%; margin-top: 1.75rem;
+    display: flex; justify-content: center; gap: 1.25rem;
+  }
+  .social-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s; text-decoration: none;
+  }
+  .social-icon:hover { transform: translateY(-3px); }
+
+  /* ── MAPA ── */
+  .map-section { width: 100%; margin-top: 1.75rem; }
+  .map-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .map-info { padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.85rem; }
+  .map-icon { width: 38px; height: 38px; background: var(--blue-dim); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .map-name { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+  .map-addr { font-size: 0.74rem; color: var(--text-2); margin-top: 0.1rem; }
+  .map-embed { width: 100%; height: 170px; border: none; display: block; filter: saturate(0.8) opacity(0.9); }
+  .btn-rota {
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    width: 100%; padding: 0.85rem;
+    background: var(--bg-2); color: var(--blue);
+    border: none; border-top: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif; font-size: 0.83rem; font-weight: 500;
+    cursor: pointer; transition: background 0.2s; text-decoration: none;
+  }
+  .btn-rota:hover { background: var(--blue-dim); }
+
+  /* ── COMPARTILHAR ── */
+  .share-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+    background: var(--blue); color: white;
+    border: none; border-radius: 100px;
+    padding: 1rem 2rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; width: 100%;
+  }
+  .share-btn:hover { background: var(--blue-2); transform: translateY(-1px); }
+
+  /* ── RODAPÉ ── */
+  .footer-bio { margin-top: 3rem; text-align: center; }
+  .footer-bio p { font-size: 0.7rem; color: var(--text-3); }
+  .footer-bio a { color: var(--blue); text-decoration: none; font-weight: 500; }
+
+  /* ── SLIDE IN ── */
+  .slide-in { opacity: 0; transform: translateX(-28px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .slide-in.right { transform: translateX(28px); }
+  .slide-in.visible { opacity: 1; transform: translateX(0); }
+  .slide-delay-1 { transition-delay: 0.08s; }
+  .slide-delay-2 { transition-delay: 0.16s; }
+  .slide-delay-3 { transition-delay: 0.24s; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- PERFIL -->
+  <div class="profile">
+    <div class="logo-wrap">
+      <div class="logo-circle">🦷</div>
+      <div class="logo-ring" id="logoRing"></div>
+    </div>
+    <h1 class="profile-name">Página Demonstrativa</h1>
+    <p class="profile-title">Odontologia</p>
+    <p class="profile-crn">CRO 00000000</p>
+    <div class="status-badge" id="statusBadge">
+      <span class="status-dot"></span>
+      <span id="statusText">Verificando...</span>
+    </div>
+    <p class="status-horario" id="statusHorario"></p>
+    <div id="lockIcons" style="display:flex; justify-content:center; gap:0.5rem; margin-top:0.5rem; font-size:1.1rem;">
+      🌐 <span id="lockIcon">🔓</span>
+    </div>
+    <p class="profile-bio">
+      "Transformando sorrisos com cuidado, tecnologia e muito carinho. Porque um sorriso bonito começa com saúde."
+    </p>
+  </div>
+
+  <!-- SERVIÇOS -->
+  <div class="links">
+    <div class="sec-label">Serviços</div>
+
+    <a id="btn1" href="https://wa.me/5524999329190?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20de%20clareamento%20dental.%20Como%20funciona%3F" target="_blank" class="link-btn primary slide-in">
+      <div class="link-icon">✨</div>
+      <div class="link-text">
+        <span class="link-label">Clareamento Dental</span>
+        <span class="link-sub">Sorriso mais branco e luminoso</span>
+      </div>
+      <span class="link-arr">→</span>
+    </a>
+
+    <a id="btn2" href="https://wa.me/5524999329190?text=Olá!%20Gostaria%20de%20informações%20sobre%20ortodontia%20e%20aparelho.%20Como%20funciona%3F" target="_blank" class="link-btn slide-in slide-delay-1 right">
+      <div class="link-icon">😁</div>
+      <div class="link-text">
+        <span class="link-label">Ortodontia & Aparelho</span>
+        <span class="link-sub">Alinhamento e correção do sorriso</span>
+      </div>
+      <span class="link-arr">→</span>
+    </a>
+
+    <a id="btn3" href="https://wa.me/5524999329190?text=Olá!%20Gostaria%20de%20informações%20sobre%20implante%20dentário.%20Como%20funciona%3F" target="_blank" class="link-btn slide-in slide-delay-2">
+      <div class="link-icon">🔩</div>
+      <div class="link-text">
+        <span class="link-label">Implante Dentário</span>
+        <span class="link-sub">Reposição de dentes com naturalidade</span>
+      </div>
+      <span class="link-arr">→</span>
+    </a>
+
+    <a id="btn4" href="https://wa.me/5524999329190?text=Olá!%20Gostaria%20de%20agendar%20uma%20limpeza%20e%20consulta%20de%20rotina." target="_blank" class="link-btn slide-in slide-delay-3 right">
+      <div class="link-icon">🦷</div>
+      <div class="link-text">
+        <span class="link-label">Limpeza & Consulta de Rotina</span>
+        <span class="link-sub">Prevenção é o melhor tratamento</span>
+      </div>
+      <span class="link-arr">→</span>
+    </a>
+
+    <a id="btn5" href="https://wa.me/5524999329190?text=Olá!%20Gostaria%20de%20informações%20sobre%20facetas%20e%20lentes%20de%20contato%20dental." target="_blank" class="link-btn slide-in">
+      <div class="link-icon">💎</div>
+      <div class="link-text">
+        <span class="link-label">Facetas & Lentes de Contato</span>
+        <span class="link-sub">Estética avançada para o sorriso perfeito</span>
+      </div>
+      <span class="link-arr">→</span>
+    </a>
+
+  </div>
+
+  <!-- ATENDIMENTO -->
+  <div class="atend-section slide-in right">
+    <div class="sec-label" style="margin-top:1.75rem;">Atendimento</div>
+    <div class="atend-card">
+      <div class="atend-row">
+        <div class="atend-icon">📍</div>
+        <div class="atend-text">
+          <strong>Presencial</strong>
+          <span>Parque Mambucaba — Angra dos Reis/RJ</span>
+        </div>
+      </div>
+      <div class="atend-row">
+        <div class="atend-icon">💻</div>
+        <div class="atend-text">
+          <strong>Teleconsulta</strong>
+          <span>Orientações e avaliação inicial online</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALCULADORA DE SORRISO -->
+  <div class="sorriso-section slide-in" id="sorrisoSection">
+    <div class="sec-label" style="margin-top:1.75rem;">😁 Avalie seu Sorriso</div>
+    <div class="sorriso-card">
+      <div class="sorriso-progress" id="sorrisoProgress"></div>
+      <div class="sorriso-counter" id="sorrisoCounter">Pergunta 1 de 5</div>
+
+      <!-- Pergunta 1 -->
+      <div class="sorriso-step active" id="sq-1">
+        <div class="sorriso-question">Você sente dor ou sensibilidade nos dentes? 😬</div>
+        <div class="sorriso-hint">Ao comer algo gelado, quente ou doce.</div>
+        <div class="sorriso-options">
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq1',3)">😣 Sim, com frequência</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq1',1)">😐 Às vezes</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq1',0)">😊 Não sinto nada</button>
+        </div>
+      </div>
+
+      <!-- Pergunta 2 -->
+      <div class="sorriso-step" id="sq-2">
+        <div class="sorriso-question">Quando foi sua última consulta? 📅</div>
+        <div class="sorriso-hint">Uma visita regular ao dentista é essencial.</div>
+        <div class="sorriso-options">
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq2',3)">😬 Nunca fui ou faz muito tempo</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq2',2)">😐 Mais de 1 ano</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq2',1)">🙂 Entre 6 meses e 1 ano</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq2',0)">😄 Menos de 6 meses</button>
+        </div>
+      </div>
+
+      <!-- Pergunta 3 -->
+      <div class="sorriso-step" id="sq-3">
+        <div class="sorriso-question">Está satisfeito com a aparência do seu sorriso? 😄</div>
+        <div class="sorriso-hint">Seja honesto — isso nos ajuda a entender o que você precisa.</div>
+        <div class="sorriso-options">
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq3',3)">😔 Não, me incomoda muito</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq3',1)">😐 Mais ou menos</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq3',0)">😁 Sim, estou satisfeito</button>
+        </div>
+      </div>
+
+      <!-- Pergunta 4 -->
+      <div class="sorriso-step" id="sq-4">
+        <div class="sorriso-question">Percebe manchas ou amarelamento? ☕</div>
+        <div class="sorriso-hint">Café, vinho e cigarro podem escurecer os dentes.</div>
+        <div class="sorriso-options">
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq4',2)">😬 Sim, bem visíveis</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq4',1)">😐 Um pouco</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq4',0)">😄 Não percebi nada</button>
+        </div>
+      </div>
+
+      <!-- Pergunta 5 -->
+      <div class="sorriso-step" id="sq-5">
+        <div class="sorriso-question">Nota sangramento ao escovar os dentes? 🩸</div>
+        <div class="sorriso-hint">Sangramento pode indicar problemas na gengiva.</div>
+        <div class="sorriso-options">
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq5',3)">😨 Sim, sempre sangra</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq5',1)">😐 Às vezes</button>
+          <button class="sorriso-option" onclick="selecionarSorriso(this,'sq5',0)">😊 Nunca sangra</button>
+        </div>
+      </div>
+
+      <!-- RESULTADO -->
+      <div class="sorriso-resultado" id="sorrisoResultado">
+        <div class="resultado-emoji" id="resEmoji"></div>
+        <div class="resultado-titulo" id="resTitulo"></div>
+        <div class="resultado-badge" id="resBadge"></div>
+        <div class="resultado-desc" id="resDesc"></div>
+        <a id="btnAgendarSorriso" href="#" target="_blank" class="btn-agendar-sorriso">
+          🦷 Agendar avaliação gratuita →
+        </a>
+        <p class="resultado-nota">Esta avaliação é apenas indicativa. Uma consulta presencial é necessária para diagnóstico completo.</p>
+      </div>
+
+      <!-- NAVEGAÇÃO -->
+      <div class="sorriso-actions" id="sorrisoActions">
+        <button class="btn-sorriso-back" id="btnSorrisoBack" onclick="sorrisoBack()" style="display:none">← Voltar</button>
+        <button class="btn-sorriso-next" id="btnSorrisoNext" onclick="sorrisoNext()">Próxima →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HORÁRIOS -->
+  <div class="hours-section slide-in right" id="hoursSection">
+    <div class="sec-label" style="margin-top:1.75rem;">Horários</div>
+    <div class="hours-card">
+      <div class="hours-row" id="row-seg"><span class="hours-day">Segunda a Sexta</span><span class="hours-time">08:00 – 18:00</span></div>
+      <div class="hours-row" id="row-sab"><span class="hours-day">Sábado</span><span class="hours-time">08:00 – 12:00</span></div>
+      <div class="hours-row" id="row-dom"><span class="hours-day">Domingo</span><span class="hours-time fechado-txt">Fechado</span></div>
+    </div>
+  </div>
+
+  <!-- ÍCONES SOCIAIS -->
+  <div class="social-icons slide-in">
+    <a href="https://www.instagram.com/amendesweb/" target="_blank" class="social-icon" style="background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a id="btnWaIcon" href="https://wa.me/5524999329190" target="_blank" class="social-icon" style="background:#25d366;">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+  </div>
+
+  <!-- MAPA -->
+  <div class="map-section slide-in right">
+    <div class="sec-label" style="margin-top:1.75rem;">Localização</div>
+    <div class="map-card">
+      <div class="map-info">
+        <div class="map-icon">📍</div>
+        <div>
+          <div class="map-name">Página Demonstrativa</div>
+          <div class="map-addr">Parque Mambucaba — Angra dos Reis/RJ</div>
+        </div>
+      </div>
+      <iframe class="map-embed"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14689.76362593888!2d-44.54198563505867!3d-23.007578066063143!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9daf5a7741ecf9%3A0xc4b07908b81643ad!2sParque%20Mambucaba%2C%20Angra%20dos%20Reis%20-%20RJ!5e0!3m2!1spt-BR!2sbr!4v1780059132213!5m2!1spt-BR!2sbr"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=-23.007578,-44.541985" target="_blank" class="btn-rota">
+        🗺️ Como chegar — Abrir no Google Maps
+      </a>
+    </div>
+  </div>
+
+  <!-- COMPARTILHAR -->
+  <div class="slide-in" style="width:100%; margin-top:1.75rem; text-align:center;">
+    <button onclick="compartilharPagina()" class="share-btn">
+      🔗 Compartilhe essa página
+    </button>
+  </div>
+
+  <!-- RODAPÉ -->
+  <div class="footer-bio slide-in">
+    <p>Página criada por <a href="https://amendesweb.com.br" target="_blank">Adriano Mendes</a> · Desenvolvedor Web</p>
+    <p style="margin-top:0.3rem;">Quer uma página assim? <a href="https://wa.me/5524999329190">Fale comigo →</a></p>
+  </div>
+
+</div>
+
+<script>
+  // ── HORÁRIOS ─────────────────────────────────────────────
+  const HORARIOS = {
+    1:{abre:8,fecha:18}, 2:{abre:8,fecha:18}, 3:{abre:8,fecha:18},
+    4:{abre:8,fecha:18}, 5:{abre:8,fecha:18},
+    6:{abre:8,fecha:12}, 0:null
+  };
+
+  function estaAberto() {
+    // MODO DEMONSTRATIVO — sempre aberto
+    return { aberto: true, fecha: 18 };
+  }
+
+  function proximaAbertura(diaAtual) {
+    const dias = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+    for (let i = 1; i <= 7; i++) {
+      const d = (diaAtual + i) % 7;
+      if (HORARIOS[d]) return dias[d];
+    }
+    return 'Segunda';
+  }
+
+  function destacarHoje() {
+    const dia = new Date().getDay();
+    const mapa = {1:'seg',2:'seg',3:'seg',4:'seg',5:'seg',6:'sab',0:'dom'};
+    const el = document.getElementById('row-' + mapa[dia]);
+    if (el) el.classList.add('hoje');
+  }
+
+  function atualizarStatus() {
+    const badge = document.getElementById('statusBadge');
+    const texto = document.getElementById('statusText');
+    const horario = document.getElementById('statusHorario');
+    const anel = document.getElementById('logoRing');
+    const btns = ['btn1','btn2','btn3','btn4','btn5'].map(id => document.getElementById(id));
+    const status = estaAberto();
+
+    if (status.aberto) {
+      badge.className = 'status-badge aberto';
+      texto.textContent = 'Disponível para consultas';
+      horario.textContent = `Atendendo até às ${status.fecha}h`;
+      document.getElementById('lockIcons').style.display = 'flex';
+      document.getElementById('lockIcon').textContent = '🔓';
+      anel.classList.add('aberto'); anel.classList.remove('fechado');
+      btns.forEach(b => { if(b) b.classList.remove('disabled-btn'); });
+      const sorrisoSec = document.getElementById('sorrisoSection');
+      if (sorrisoSec) { sorrisoSec.style.opacity = '1'; sorrisoSec.style.pointerEvents = 'auto'; }
+      const waIcon = document.getElementById('btnWaIcon');
+      if (waIcon) { waIcon.style.opacity = '1'; waIcon.style.pointerEvents = 'auto'; }
+    } else {
+      badge.className = 'status-badge fechado';
+      texto.textContent = 'Fora do horário de atendimento';
+      document.getElementById('lockIcons').style.display = 'flex';
+      document.getElementById('lockIcon').textContent = '🔒';
+      anel.classList.add('fechado'); anel.classList.remove('aberto');
+      btns.forEach(b => { if(b) b.classList.add('disabled-btn'); });
+      const sorrisoSec = document.getElementById('sorrisoSection');
+      if (sorrisoSec) { sorrisoSec.style.opacity = '0.4'; sorrisoSec.style.pointerEvents = 'none'; }
+      const waIcon = document.getElementById('btnWaIcon');
+      if (waIcon) { waIcon.style.opacity = '0.4'; waIcon.style.pointerEvents = 'none'; }
+      if (status.motivo === 'domingo') horario.textContent = 'Fechado aos domingos. Retorna Segunda às 8h';
+      else if (status.motivo === 'cedo') horario.textContent = `Abrimos às ${status.abre}h`;
+      else horario.textContent = `Retorna ${status.proximoDia} às 8h`;
+    }
+  }
+
+  // ── CALCULADORA DE SORRISO ────────────────────────────────
+  let sorrisoStep = 1;
+  const sorrisoTotal = 5;
+  const sorrisoRespostas = {sq1:0, sq2:0, sq3:0, sq4:0, sq5:0};
+
+  function sorrisoUpdateUI() {
+    document.getElementById('sorrisoCounter').textContent = 'Pergunta ' + sorrisoStep + ' de ' + sorrisoTotal;
+    document.getElementById('sorrisoProgress').style.width = ((sorrisoStep / sorrisoTotal) * 100) + '%';
+    const btnBack = document.getElementById('btnSorrisoBack');
+    if (btnBack) btnBack.style.display = sorrisoStep > 1 ? 'block' : 'none';
+    document.getElementById('btnSorrisoNext').textContent = sorrisoStep === sorrisoTotal ? 'Ver resultado ✓' : 'Próxima →';
+  }
+
+  function selecionarSorriso(btn, key, pontos) {
+    const parent = btn.closest('.sorriso-step');
+    parent.querySelectorAll('.sorriso-option').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    sorrisoRespostas[key] = pontos;
+  }
+
+  function sorrisoNext() {
+    if (sorrisoStep === sorrisoTotal) {
+      mostrarResultadoSorriso();
+      return;
+    }
+    document.getElementById('sq-' + sorrisoStep).classList.remove('active');
+    sorrisoStep++;
+    document.getElementById('sq-' + sorrisoStep).classList.add('active');
+    sorrisoUpdateUI();
+  }
+
+  function sorrisoBack() {
+    document.getElementById('sq-' + sorrisoStep).classList.remove('active');
+    sorrisoStep--;
+    document.getElementById('sq-' + sorrisoStep).classList.add('active');
+    sorrisoUpdateUI();
+  }
+
+  function mostrarResultadoSorriso() {
+    const total = Object.values(sorrisoRespostas).reduce((a, b) => a + b, 0);
+    document.getElementById('sq-' + sorrisoStep).classList.remove('active');
+    document.getElementById('sorrisoActions').style.display = 'none';
+    document.getElementById('sorrisoCounter').style.display = 'none';
+    document.getElementById('sorrisoProgress').style.width = '100%';
+
+    const resultado = document.getElementById('sorrisoResultado');
+    resultado.classList.add('show');
+
+    let emoji, titulo, badge, badgeClass, desc, msg;
+
+    if (total <= 2) {
+      emoji = '😁'; titulo = 'Sorriso Saudável!';
+      badge = '✅ Excelente'; badgeClass = 'badge-verde';
+      desc = 'Parabéns! Seu sorriso está em ótimo estado. Continue com os cuidados preventivos e as visitas regulares ao dentista.';
+      msg = 'Olá! Fiz a avaliação do sorriso e obtive resultado EXCELENTE. Gostaria de agendar uma consulta de rotina!';
+    } else if (total <= 5) {
+      emoji = '🙂'; titulo = 'Atenção Necessária';
+      badge = '⚠️ Requer Cuidado'; badgeClass = 'badge-amarelo';
+      desc = 'Seu sorriso precisa de alguns cuidados. Recomendamos uma avaliação para prevenir problemas maiores.';
+      msg = 'Olá! Fiz a avaliação do sorriso e obtive resultado de ATENÇÃO. Gostaria de agendar uma consulta!';
+    } else {
+      emoji = '😬'; titulo = 'Consulta Urgente!';
+      badge = '🚨 Consulta Urgente'; badgeClass = 'badge-vermelho';
+      desc = 'Identificamos alguns pontos que precisam de atenção imediata. Não deixe para depois — agende sua consulta agora!';
+      msg = 'Olá! Fiz a avaliação do sorriso e obtive resultado URGENTE. Preciso agendar uma consulta o quanto antes!';
+    }
+
+    document.getElementById('resEmoji').textContent = emoji;
+    document.getElementById('resTitulo').textContent = titulo;
+    document.getElementById('resBadge').textContent = badge;
+    document.getElementById('resBadge').className = 'resultado-badge ' + badgeClass;
+    document.getElementById('resDesc').textContent = desc;
+    document.getElementById('btnAgendarSorriso').href = 'https://wa.me/5524999329190?text=' + encodeURIComponent(msg);
+  }
+
+  // ── COMPARTILHAR ──────────────────────────────────────────
+  function compartilharPagina() {
+    if (navigator.share) {
+      navigator.share({ title: 'Página Demonstrativa — Odontologia', url: window.location.href });
+    } else {
+      navigator.clipboard.writeText(window.location.href).then(() => alert('Link copiado!'));
+    }
+  }
+
+  // ── SLIDE IN ──────────────────────────────────────────────
+  const slideEls = document.querySelectorAll('.slide-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  slideEls.forEach(el => observer.observe(el));
+
+  // ── INIT ─────────────────────────────────────────────────
+  atualizarStatus();
+  destacarHoje();
+  sorrisoUpdateUI();
+  setInterval(atualizarStatus, 60000);
+</script>
+</body>
+</html>
